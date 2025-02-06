@@ -1,23 +1,14 @@
-import { useRef, useState } from "react";
-import { Button } from "./components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
-import { Input } from "./components/ui/input";
-import Tasklist from "./components/Tasklist";
+import { useState } from "react";
+import { Card, CardContent } from "./components/ui/card";
+import Tasklist from "./components/TaskList";
+import TaskInput from "./components/TaskInput";
 
 function App() {
-    const [task, setTask] = useState<string>("");
     const [tasks, setTasks] = useState<string[]>([]);
-    const focusInput = useRef<HTMLInputElement>(null);
 
-    function handleButton() {
-        if (task.trim() !== "") {
-            setTasks([...tasks, task]);
-            setTask("");
-            if (focusInput.current) {
-                focusInput.current.focus();
-            }
-        }
-    }
+    const addTasks = (task: string) => {
+        setTasks([...tasks, task]);
+    };
 
     function handleDelete(index: number) {
         const newTasks = tasks.filter((_, i) => i !== index);
@@ -27,27 +18,7 @@ function App() {
     return (
         <div className="flex justify-center items-center pt-[100px]">
             <Card className="w-[500px]">
-                <CardHeader>
-                    <CardTitle>
-                        <h1 className="text-[30px] font-bold ">Todo List</h1>
-                        <div className="flex w-full pt-[20px] items-center ">
-                            <Input
-                                ref={focusInput}
-                                className="mr-3"
-                                type="email"
-                                placeholder="Task..."
-                                value={task}
-                                onChange={(e) => setTask(e.target.value)}
-                            />
-                            <Button
-                                type="submit"
-                                onClick={() => handleButton()}
-                            >
-                                +
-                            </Button>
-                        </div>
-                    </CardTitle>
-                </CardHeader>
+                <TaskInput onAddTasks={addTasks}></TaskInput>
                 <CardContent>
                     {tasks.length > 0 ? (
                         <Tasklist
